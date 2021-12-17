@@ -67,7 +67,6 @@ const _ajax = ({ url, method = "GET", data = null, contentType = false }) => {
     };
   });
 };
-
 ```
 调用时候就能这样
 
@@ -75,9 +74,46 @@ const _ajax = ({ url, method = "GET", data = null, contentType = false }) => {
 _ajax({url:xxxxx}).then(res=>{fun(res)},rej=>{fun(rej)}).then...
 ```
 
-
-
 html 上用 form 表单, `onsubmit` 发请求.
+
+```js
+const _onsubmit = (route) => {
+  const username = String(document.getElementById("username").value);
+  const password = String(document.getElementById("password").value);
+  const captcha = String(document.getElementById("captcha").value);
+  if (username.length === 0) {
+    alert("用户名不能为空");
+    return false;
+  }
+  if (password.length === 0) {
+    alert("密码不能为空");
+    return false;
+  }
+  _ajax({
+    url: `${url}/api/${route}`,
+    method: "POST",
+    contentType: "application/json",
+    data: JSON.stringify({
+      username: username,
+      password: password,
+      captcha: captcha,
+    }),
+  }).then(
+    (resolved) => {
+      alert(resolved);
+      if (route === "login")
+        window.localStorage.token = JSON.parse(resolved).data.token;
+      window.location.href = "/";
+    },
+    (rejected) => {
+      alert(rejected);
+    }
+  );
+  return false;
+};
+```
+
+
 
 `server.js` 里写各种 api, 通过 `model.js` 里导出的 User 进行数据增、查操作,
 定义了一些中间件来对输入的用户名,密码和,验证码进行检验. 
@@ -114,19 +150,17 @@ const UserSchema = new mongoose.Schema({
     },
   },
 });
-
-
 ```
 
 用户登录成功后, nodejs 产生一个 token 发送给客户端, 客户端保存在 `localStorage`
-中, 当请求某些特定的 api 时候就会带上这个 token, 以保持用户登录. 注销就删除这个
+中, 当请求某些特定的 api 时候带上这个 token, 以便后端鉴权, 注销就删除这个
 token. 我没有做 token 定期失效.
 
 token 加密需要用到 `SECRET`, 最好是做成环境变量, 此处我定义成全局变量
 
 ```js 
 app.post("/api/login",[nameValid,pwdValid,captcha], async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const user = await User.findOne({
     username: req.body.username,
   });
@@ -161,7 +195,6 @@ const captcha = async (req, res, next) => {
   // console.log(req.session)
   req.session.captcha===cap?next():res.status(422).send("验证码不正确")
 };
-
 ```
 
 需要处理一下跨域问题, 因为生成验证码和验证验证码的 api 不同, 这样
@@ -169,9 +202,8 @@ session 可以共享
 
 ```js 
 app.all("*", function (req, res, next) {
-  //设置允许跨域的域名，*代表允许任意域名跨域
-
   res.header("Access-Control-Allow-Credentials", "true");
+  //设置允许跨域的域名，*代表允许任意域名跨域
   res.header("Access-Control-Allow-Origin", "http://localhost:8080");
   //允许的header类型
   res.header("Access-Control-Allow-Headers", "origin, expires, content-type, x-e4m-with, authorization");
