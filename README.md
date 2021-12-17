@@ -4,7 +4,9 @@
 
 配置在 `config/default.js` ，当然可以在具体文件配置，但是这儿方便一点
 
-在线试验：https://auth.bilibilianime.com/
+在线 demo：https://auth.bilibilianime.com/
+
+仓库: https://github.com/ayasa520/NJU-WEB/edit/web_3/
 
 ## 部署（启动）
 
