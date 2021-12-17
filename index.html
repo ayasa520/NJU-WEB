@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <style>
+      
+        .recommand-box {
+            margin:0 auto ;
+            width: 1226px;
+            height: 384px;
+        }
+        .recommand-box li {
+            margin-right:  14px;
+            width: 184px;
+            margin-bottom: 14px;
+            height: 184px;
+            float: left;
+            list-style: none;
+        }
+        .recommand-box .last{
+            margin:  0;
+        }
+        a{
+            display: block;
+            text-decoration: none;
+        }
+        .banner {
+            display: flex;
+            align-items: center;
+        }
+        .banner-left{
+            margin-left: 24px;
+        }
+        .banner-left>img{
+            width: 82px;
+            height: 32px;
+        }
+        .banner-right>div{
+            display: flex;
+
+            gap:8px;
+        }
+        .banner-right {
+            margin-right: 24px;
+            margin-left: auto;
+            align-items: center;
+        }
+        .banner-right a>span{
+            line-height: 22px;
+            font-size: 14px;
+            font-weight: bold;
+            color: rgb(253, 158, 22);
+            white-space: nowrap
+        }
+        .recommand {
+            margin: 0 auto;
+            width: 1226px;
+            list-style-type: disc;
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+            padding-inline-start: 40px;
+            padding-top: 36px;
+                
+        }
+        .recommand span{
+            font-size: 20px;
+            line-height: 28px;
+            color: rgb(71, 71, 71);
+            font-weight: bold;
+            margin: 0px;
+        }
+        .recommand-box img{
+            width: 184px;
+            height: 184px;
+            border-radius: 12px;
+        }
+    </style>
+    <body>
+        <div class="banner">
+            <div class="banner-left">
+                <img src="https://s.pximg.net/www/js/build/14e52f8ff79c3dc931eb16c6f4b53890.svg" alt="PIXIV">
+            </div>
+            <div class="banner-right">
+                <div>
+                    <div class="sign-in">
+                        <a href="./signin">
+                            <span>登陆</span>
+                        </a>
+
+                    </div>
+                    <div class="sign-up"></div>
+                        <a href="./signup/">
+                            <span>注册</span>
+                        </a>
+                </div>
+            </div>
+        </div>
+ 
+        <div class="main">
+            <div class="recommand">
+                <span>为您推荐</span>
+            </div>
+        <!-- ul.recommand-box>(li>a[href="./imgbig/$@0.jpg"]>img[src="images/$@0.jpg"])*12 -->
+            <ul class="recommand-box">
+                <li><a href="./imgbig/0.jpg"><img src="images/0.jpg" alt=""></a></li>
+                <li><a href="./imgbig/1.jpg"><img src="images/1.jpg" alt=""></a></li>
+                <li><a href="./imgbig/2.png"><img src="images/2.jpg" alt=""></a></li>
+                <li><a href="./imgbig/3.jpg"><img src="images/3.jpg" alt=""></a></li>
+                <li><a href="./imgbig/4.jpg"><img src="images/4.jpg" alt=""></a></li>
+                <li><a href="./imgbig/5.jpg"><img src="images/5.jpg" alt=""></a></li>
+                <li><a href="./imgbig/6.png"><img src="images/6.jpg" alt=""></a></li>
+                <li><a href="./imgbig/7.jpg"><img src="images/7.jpg" alt=""></a></li>
+                <li><a href="./imgbig/8.jpg"><img src="images/8.jpg" alt=""></a></li>
+                <li><a href="./imgbig/9.jpg"><img src="images/9.jpg" alt=""></a></li>
+                <li><a href="./imgbig/10.jpg"><img src="images/10.jpg" alt=""></a></li>
+                <li><a href="./imgbig/11.png"><img src="images/11.jpg" alt=""></a></li>
+            </ul>
+        </div>
+    </body>
+</html>
+
+
