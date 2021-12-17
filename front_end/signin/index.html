@@ -1,0 +1,104 @@
+<!-- 登录 -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>登录</title>
+    <script src="/js/index.js"></script>
+    <style>
+      .background {
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        position: fixed;
+        z-index: -1;
+      }
+      .background-img {
+        width: 100%;
+        height: 100%;
+        background-image: url(/image/big_img/米山舞.jpg);
+        background-size: cover;
+      }
+
+      .signin-form {
+        margin: 20vh auto 0;
+        width: 363px;
+        height: 350px;
+        background-color: hsla(0, 0%, 100%, 0.92);
+        border-radius: 4px;
+        text-align: center;
+        padding: 40px 0 40px;
+      }
+      .signin-form-logo {
+        width: 164px;
+        height: 64px;
+        background-image: url(/image/small_img/logo.svg);
+        background-size: contain;
+        display: inline-block;
+      }
+      .signin-form-slogn {
+        color: #757c80;
+        font-size: 12px;
+        margin-bottom: 24px;
+        font-weight: 700;
+      }
+      .input-field {
+        width: 300px;
+        border: 1px solid #dfebf2;
+        margin: 0 auto;
+      }
+      .input-field input:placeholder-shown {
+        color: #ccc;
+      }
+      .input-field input {
+        border: none;
+        outline: none;
+        border-radius: 4px;
+        padding-left: 10px;
+
+        width: 290px;
+        height: 40px;
+      }
+      .signin-container button {
+        width: 300px;
+        color: #fff;
+        background: #0096fa;
+        height: 40px;
+        border-radius: 22px;
+        margin-top: 30px;
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="background">
+      <div class="background-img"></div>
+    </div>
+    <div class="signin-form">
+      <div class="signin-form-logo"></div>
+      <div class="signin-form-slogn">让创作变得更有乐趣</div>
+      <div class="signin-container">
+        <form action="" onsubmit="return _onsubmit('login')">
+          <div class="input-field">
+            <input type="text" id="username" placeholder="用户名" />
+          </div>
+          <div class="input-field" style="border: none">
+            <input type="password" id="password" placeholder="密码" />
+          </div>
+          <div class="input-field">
+            <a href="JavaScript: refresh()"> <img src alt="验证码" id="captcha-img" /> </a>
+            <input type="text" id="captcha" , placeholder="验证码" />
+          </div>
+
+          <button type="submit">登录</button>
+        </form>
+      </div>
+    </div>
+    <script>
+      document.getElementById("captcha-img").src = `${url}/api/verifyCode`;
+    </script>
+  </body>
+</html>

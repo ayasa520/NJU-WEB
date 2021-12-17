@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="/js/index.js"></script>
+  </head>
+  <style>
+    .recommand-box {
+      margin: 0 auto;
+      width: 1226px;
+      height: 384px;
+    }
+    .recommand-box li {
+      margin-right: 14px;
+      width: 184px;
+      margin-bottom: 14px;
+      height: 184px;
+      float: left;
+      list-style: none;
+    }
+    .recommand-box .last {
+      margin: 0;
+    }
+    a {
+      display: block;
+      text-decoration: none;
+    }
+    .banner {
+      display: flex;
+      align-items: center;
+    }
+    .banner-left {
+      margin-left: 24px;
+    }
+    .banner-left > img {
+      width: 82px;
+      height: 32px;
+    }
+    .banner-right > div {
+      display: flex;
+
+      gap: 8px;
+    }
+    .banner-right {
+      margin-right: 24px;
+      margin-left: auto;
+      align-items: center;
+    }
+    .banner-right a > span {
+      line-height: 22px;
+      font-size: 14px;
+      font-weight: bold;
+      color: rgb(253, 158, 22);
+      white-space: nowrap;
+    }
+    .recommand {
+      margin: 0 auto;
+      width: 1226px;
+      list-style-type: disc;
+      margin-block-start: 1em;
+      margin-block-end: 1em;
+      padding-inline-start: 40px;
+      padding-top: 36px;
+    }
+    .recommand span {
+      font-size: 20px;
+      line-height: 28px;
+      color: rgb(71, 71, 71);
+      font-weight: bold;
+      margin: 0px;
+    }
+    .recommand-box img {
+      width: 184px;
+      height: 184px;
+      border-radius: 12px;
+    }
+  </style>
+  <body>
+    <div class="banner">
+      <div class="banner-left">
+        <img
+          src="https://s.pximg.net/www/js/build/14e52f8ff79c3dc931eb16c6f4b53890.svg"
+          alt="PIXIV"
+        />
+      </div>
+      <div class="banner-right">
+        <div>
+          <div id="user" style="display: none">
+            <a href="#">
+              <span></span>
+            </a>
+          </div>
+          <div class="sign-in" id="sign-in" style="display: none">
+            <a href="./signin">
+              <span>登录</span>
+            </a>
+          </div>
+          <div class="sign-up" id="sign-up" style="display: none">
+            <a href="./signup/">
+              <span>注册</span>
+            </a>
+          </div>
+          <div class="logout" id="logout" style="display: none">
+            <a href="">
+              <span>注销</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="recommand">
+        <span>为您推荐</span>
+      </div>
+      <!-- ul.recommand-box>(li>a[href="/image/big_img/$@0.jpg"]>img[src="/image/small_img/$@0.jpg"])*12 -->
+      <ul class="recommand-box">
+        <li>
+          <a href="/image/big_img/0.jpg"><img src="/image/small_img/0.jpg" alt="" /></a>
+        </li>
+        <li>
+          <a href="/image/big_img/1.jpg"><img src="/image/small_img/1.jpg" alt="" /></a>
+        </li>
+        <li>
+          <a href="/image/big_img/2.png"><img src="/image/small_img/2.jpg" alt="" /></a>
+        </li>
+        <li>
+          <a href="/image/big_img/3.jpg"><img src="/image/small_img/3.jpg" alt="" /></a>
+        </li>
+        <li>
+          <a href="/image/big_img/4.jpg"><img src="/image/small_img/4.jpg" alt="" /></a>
+        </li>
+        <li>
+          <a href="/image/big_img/5.jpg"><img src="/image/small_img/5.jpg" alt="" /></a>
+        </li>
+        <li>
+          <a href="/image/big_img/6.png"><img src="/image/small_img/6.jpg" alt="" /></a>
+        </li>
+        <li>
+          <a href="/image/big_img/7.jpg"><img src="/image/small_img/7.jpg" alt="" /></a>
+        </li>
+        <li>
+          <a href="/image/big_img/8.jpg"><img src="/image/small_img/8.jpg" alt="" /></a>
+        </li>
+        <li>
+          <a href="/image/big_img/9.jpg"><img src="/image/small_img/9.jpg" alt="" /></a>
+        </li>
+        <li>
+          <a href="/image/big_img/10.jpg"><img src="/image/small_img/10.jpg" alt="" /></a>
+        </li>
+        <li>
+          <a href="/image/big_img/11.png"><img src="/image/small_img/11.jpg" alt="" /></a>
+        </li>
+      </ul>
+    </div>
+    <script>
+      _ajax({ url: `${url}/api/profile` }).then(
+        (res) => {
+          document.querySelector(".banner-right>div>div a span").innerText =
+            JSON.parse(res).username;
+          document.getElementById("sign-in").style.display = "none";
+          document.getElementById("sign-up").style.display = "none";
+          document.getElementById("user").style.display = "block";
+          document.getElementById("logout").style.display = "block";
+        },
+        (rej) => {
+          document.getElementById("sign-in").style.display = "block";
+          document.getElementById("sign-up").style.display = "block";
+          document.getElementById("user").style.display = "none";
+          document.getElementById("logout").style.display = "none";
+        }
+      );
+      document.getElementById("logout").onclick = () => {
+        window.localStorage.token = null;
+        document.getElementById("sign-in").style.display = "block";
+        document.getElementById("sign-up").style.display = "block";
+        document.getElementById("user").style.display = "none";
+        document.getElementById("logout").style.display = "none";
+      };
+    </script>
+  </body>
+</html>

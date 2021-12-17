@@ -1,0 +1,31 @@
+{
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "concurrently": "^6.4.0",
+    "config-lite": "^3.0.0",
+    "cookie-parser": "^1.4.6",
+    "cookie-session": "^1.4.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "https-server": "^0.1.2",
+    "i": "^0.3.7",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.1.0",
+    "npm": "^8.3.0",
+    "svg-captcha": "^1.4.0"
+  },
+  "scripts": {
+    "start": "nodemon ./bin/www",
+    "dev": "concurrently \"nodemon ./bin/www\" \"live-server ./front_end\""
+  },
+  "name": "web3",
+  "description": "## 部署",
+  "version": "1.0.0",
+  "main": "index.js",
+  "keywords": [
+    "作业"
+  ],
+  "author": "Rikka",
+  "license": "ISC"
+}
