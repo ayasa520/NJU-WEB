@@ -121,7 +121,7 @@ button:not(.control-button):hover{
 .editor_controls span{
     background-color: inherit;
 }
-.editor_controls svg {
+.editor_controls svg,.toolbar_item svg {
     width: 30px;
     height: 30px;
     background: none;
@@ -188,3 +188,22 @@ button:not(.control-button):hover{
 .confirm_button{
     background-color:#8AB2E0;
 }
+.toolbar_item svg{
+    width: 19px;
+    height: 19px;
+    vertical-align: middle;
+}
+.left .toolbar_item button span{
+    background-color: inherit;
+}
+body.sideMenu{ margin:0; -webkit-transform:none; transform:none; }
+#sideToggle{ display:none; }
+#sideToggle:checked + aside{ left:0; }
+#sideToggle:checked ~ #wrap{ padding-left:220px; }
+body > aside{color:white; position:absolute; top: 50px; bottom:0; left:-200px; width:200px; background:#1a1e24; transition:0.2s ease-out; -webkit-transition:0.2s ease-out; }
+body > aside > h2{ color:#FFF; text-align:center; font-weight:normal; padding:10px;
+ }
+
+ aside .slider{
+     text-align: center;
+ }

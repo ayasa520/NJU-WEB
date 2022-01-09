@@ -15,7 +15,10 @@
           <button type="">打开</button>
         </div>
         <div class="toolbar_item">
-          <button type="">保存</button>
+ 
+        <button onclick="download_image()"><svg viewBox="0 0 24 24" fit="" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" focusable="false">
+                  <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path>
+                </svg><span>保存</span></button>
         </div>
       </div>
       <div class="center">
@@ -32,8 +35,30 @@
     <div class="content">
       <!-- <img id="original-image" src="/image/big_img/0.jpg" /> -->
       <canvas id="original-image"></canvas>
-      <canvas id="filtered-image"></canvas>
+      <canvas id="filtered-image" hidden='false'></canvas>
     </div>
+    <input type='checkbox' id='sideToggle'>
+    <aside>
+      <div class="slider">
+        <div class="slider_content">
+         <p>亮度</p> 
+        </div>
+        <input class="range slider__range" type="range" value="100" min="0" max="200" step="1" data-reactid=".0.1.0.0.$/=11.1.1">
+      </div>
+   <div class="slider">
+        <div class="slider_content">
+         <p>饱和度</p> 
+        </div>
+        <input class="range slider__range" type="range" value="100" min="0" max="200" step="1" data-reactid=".0.1.0.0.$/=11.1.1">
+      </div>
+   <div class="slider">
+        <div class="slider_content">
+         <p>对比度</p> 
+        </div>
+        <input class="range slider__range" type="range" value="100" min="0" max="200" step="1" data-reactid=".0.1.0.0.$/=11.1.1">
+      </div>
+
+    </aside>
     <div class="editor_controls" id="footer">
  
     </div>
@@ -42,6 +67,13 @@
     var originalImage = document.getElementById("original-image");
     // // The canvas where the processed image will be rendered (With filter)
     var filteredImageCanvas = document.getElementById("filtered-image");
+    
+    const sidebar_on=()=>{
+      document.getElementById('sideToggle').checked = true;
+    }
+    const sidebar_off=()=>{
+      document.getElementById('sideToggle').checked = false;
+    }
 
     const paint = (img, dom, rate) => {
       dom.height = img.height * rate;
@@ -52,13 +84,13 @@
     };
 
     // 如果想拿到 Promise 的东西, 得返回 Promise 然后 then
-    function __picWM({ url = "", dom = null } = {}) {
+    function __picWM({ url = "", dom = null ,rate=0} = {}) {
       return new Promise((resolve, reject) => {
         const img = new Image();
         img.src = url;
         img.crossOrigin = "anonymous";
         img.onload = function () {
-          const rate = (screen.height * 0.6) / img.height;
+          rate =rate!=0?rate:(screen.height * 0.6) / img.height;
           const digit = document.getElementById("scale_rate");
           digit.innerText = `${rate * 100}`.slice(0, 2) + "%";
 
@@ -75,15 +107,14 @@
 
     // ctx.scale(5,9);
 
-    let img_promise = __picWM({
-      url: "/image/big_img/0.jpg",
-      dom: originalImage,
-    });
-    __picWM({ url: "/image/big_img/0.jpg", dom: filteredImageCanvas });
-
+    let img_promise =__picWM({ url: window.location.href.split('?')[1], dom: originalImage });
+    // __picWM({ url: "/image/big_img/0.jpg", dom: filteredImageCanvas,rate:1 });
+    img_promise.then((res)=>{paint(res,filteredImageCanvas,1)})
+   
     const lvjing = (_filter) => {
       const filter = LenaJS[_filter];
-      LenaJS.redrawCanvas(filteredImageCanvas, filter);
+      LenaJS.redrawCanvas(originalImage, filter);
+      LenaJS.redrawCanvas(filteredImageCanvas,filter);
     };
 
     const zoom_in = () => {
@@ -93,7 +124,6 @@
         val + 5 <= 300 &&
         img_promise.then((res) => {
           paint(res, originalImage, (val + 5) / 100);
-          paint(res, filteredImageCanvas, (val + 5) / 100);
         })
           ? `${val + 5}%`
           : "300%";
@@ -105,7 +135,6 @@
         val - 5 >= 10 &&
         img_promise.then((res) => {
           paint(res, originalImage, (val - 5) / 100);
-          paint(res, filteredImageCanvas, (val - 5) / 100);
         })
           ? `${val - 5}%`
           : "10%";
@@ -121,8 +150,12 @@
         }
     const cancel = ()=>{
       control_bar();
-      zoom_in();
-      zoom_out();
+      const digit = document.getElementById("scale_rate");
+      const val = Number(digit.innerText.slice(0, -1));
+        img_promise.then((res) => {
+          paint(res, originalImage, val/100);
+          paint(res, filteredImageCanvas, 1);
+        })
   }
     const control_bar = ()=>{
           document.getElementById('footer').innerHTML = ` <button class="control-button" onclick = "filter_bar()">
@@ -131,7 +164,19 @@
                     <path stroke="null" id="svg_6" d="m323.394476,295.877c-7.376972,0 -13.356304,5.814688 -13.356304,12.988531c0,30.790531 -25.763601,55.845438 -57.431145,55.845438c-7.376972,0 -13.356304,5.814687 -13.356304,12.988531c0,7.173844 5.979331,12.988531 13.356304,12.988531c46.394142,0 84.143014,-36.709438 84.143014,-81.821781c0.000739,-7.174562 -5.978592,-12.98925 -13.355565,-12.98925z"></path>
                     </svg>
                     <span>滤镜</span>
-                 </button>`
+                 </button>
+            <button  class="control-button" id="effect">
+              <svg viewBox="0 0 32 32" fit="" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" focusable="false">
+                    <path d="M15 5c-1.293 0-2.395.844-2.813 2H4v2h8.188c.417 1.156 1.519 2 2.812 2s2.395-.844 2.813-2H28V7H17.812C17.395 5.844 16.294 5 15 5zm0 2c.563 0 1 .438 1 1 0 .563-.438 1-1 1-.563 0-1-.438-1-1 0-.563.438-1 1-1zm7 6c-1.293 0-2.395.844-2.813 2H4v2h15.188c.417 1.156 1.519 2 2.812 2s2.395-.844 2.813-2H28v-2h-3.188c-.417-1.156-1.519-2-2.812-2zm0 2c.563 0 1 .438 1 1 0 .563-.438 1-1 1-.563 0-1-.438-1-1 0-.563.438-1 1-1zm-11 6c-1.293 0-2.395.844-2.813 2H4v2h4.188c.417 1.156 1.519 2 2.812 2s2.395-.844 2.813-2H28v-2H13.812c-.417-1.156-1.519-2-2.812-2zm0 2c.563 0 1 .438 1 1 0 .563-.438 1-1 1-.563 0-1-.438-1-1 0-.563.438-1 1-1z"></path>
+              </svg>
+            <span>特效</span>
+            </button>
+            `
+          document.getElementById('effect').onclick=(e)=>{
+                sidebar_on();
+                e.stopPropagation ? e.stopPropagation() : e.cancelBubble = true;
+          }
+          document.querySelector('aside').onclick = document.getElementById('effect').onclick;
         }
     const  filter_bar=()=>{
           document.getElementById('footer').innerHTML = `     <div>
@@ -149,11 +194,40 @@
           <div onclick="lvjing('saturation')" class="filter-item"><img src="" alt=""/><span>saturation</span></div>
         </div>
         <button class="confirm_button raised_button" onclick="confirm()">确认</button> 
-
+        
       </div>`
     }
     control_bar()
     // filter_bar()
     // Get the image
+      const  base64Img2Blob = (code)=>{
+        const parts = code.split(';base64,');
+        const contentType = parts[0].split(':')[1];
+        const raw = window.atob(parts[1]);
+        const rawLength = raw.length;
+
+        const uInt8Array = new Uint8Array(rawLength);
+
+        for (let i = 0; i < rawLength; ++i) {
+                                uInt8Array[i] = raw.charCodeAt(i);
+                              }
+
+        return new Blob([uInt8Array], {type: contentType}); 
+    }
+    const download_image=()=>{
+                   
+      var aLink = document.createElement('a');
+      var blob = base64Img2Blob(originalImage.toDataURL()); //new Blob([content]);
+    
+      var evt = document.createEvent("mouseEvents");
+      evt.initEvent("click", false, false);//initEvent 不加后两个参数在FF下会报错
+      aLink.download = 'result.png';
+      aLink.href = URL.createObjectURL(blob);
+
+      aLink.dispatchEvent(evt);
+        }
+    document.onclick = function () {
+      sidebar_off();
+    }
   </script>
 </html>

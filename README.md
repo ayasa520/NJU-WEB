@@ -1,8 +1,8 @@
 # web 第四次作业
 
-使用 lena.js 做了一个滤镜编辑图片网页
+使用 lena.js 做了一个滤镜编辑图片网页, 在首页点击图片即可进入编辑页面
 
-![image-20220109234430930](/home/rikka/project/rikka-os2/img/image-20220109234430930.png)
+![](assets/img/2022-01-10-03-39-09.png)
 
 完成点:
 
