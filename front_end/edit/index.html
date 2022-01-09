@@ -34,8 +34,8 @@
       <canvas id="original-image"></canvas>
       <canvas id="filtered-image"></canvas>
     </div>
-    <div class="editor_controls">
-      
+    <div class="editor_controls" id="footer">
+ 
     </div>
   </body>
   <script>
@@ -75,14 +75,14 @@
 
     // ctx.scale(5,9);
 
-    const img_promise = __picWM({
+    let img_promise = __picWM({
       url: "/image/big_img/0.jpg",
       dom: originalImage,
     });
     __picWM({ url: "/image/big_img/0.jpg", dom: filteredImageCanvas });
 
-    const lvjing = () => {
-      const filter = LenaJS["red"];
+    const lvjing = (_filter) => {
+      const filter = LenaJS[_filter];
       LenaJS.redrawCanvas(filteredImageCanvas, filter);
     };
 
@@ -110,6 +110,50 @@
           ? `${val - 5}%`
           : "10%";
     };
+
+    const confirm=()=>{
+          control_bar();
+          img_promise = new Promise((res)=>{
+                const new_img = new Image()
+                new_img.src = filteredImageCanvas.toDataURL("image/png");
+                res(new_img);
+              })
+        }
+    const cancel = ()=>{
+      control_bar();
+      zoom_in();
+      zoom_out();
+  }
+    const control_bar = ()=>{
+          document.getElementById('footer').innerHTML = ` <button class="control-button" onclick = "filter_bar()">
+                    <svg viewBox="0 0 512 512" fit="" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" focusable="false">
+                    <path stroke="null" id="svg_3" d="m381.694065,247.362094c-0.2136,-0.35075 -0.43607,-0.697187 -0.685886,-1.030687l-116.642047,-158.889031c-2.502598,-3.416219 -6.553613,-5.442375 -10.867749,-5.442375c-4.31857,0 -8.365151,2.026156 -10.86701,5.442375l-116.642786,158.889031c-0.240208,0.3335 -0.471547,0.675625 -0.681452,1.030687c-23.960932,40.189625 -23.578078,88.974063 1.02809,130.505594c26.356361,44.4935 75.083846,72.132313 127.163157,72.132313s100.806797,-27.643125 127.166853,-72.136625c24.601733,-41.527938 24.989023,-90.315969 1.028829,-130.501281zm-24.174533,117.535031c-21.600981,36.470813 -61.459988,59.126531 -104.021149,59.126531c-42.556727,0 -82.415733,-22.651406 -104.021149,-59.122219c-19.967567,-33.708656 -20.461287,-71.573844 -1.375468,-103.992344l105.396617,-143.568156l105.396617,143.57175c19.081384,32.419219 18.59136,70.283687 -1.375468,103.984438z"></path>
+                    <path stroke="null" id="svg_6" d="m323.394476,295.877c-7.376972,0 -13.356304,5.814688 -13.356304,12.988531c0,30.790531 -25.763601,55.845438 -57.431145,55.845438c-7.376972,0 -13.356304,5.814687 -13.356304,12.988531c0,7.173844 5.979331,12.988531 13.356304,12.988531c46.394142,0 84.143014,-36.709438 84.143014,-81.821781c0.000739,-7.174562 -5.978592,-12.98925 -13.355565,-12.98925z"></path>
+                    </svg>
+                    <span>滤镜</span>
+                 </button>`
+        }
+    const  filter_bar=()=>{
+          document.getElementById('footer').innerHTML = `     <div>
+        <button class="cancel_button raised_button" onclick="cancel()">取消</button> 
+        <div class="filter-list">
+          <div onclick="lvjing('red')" class="filter-item"><img src="" alt=""/><span>Red</span></div>
+          <div onclick="lvjing('gaussian')" class="filter-item"><img src="" alt=""/><span>Gaussian</span></div>
+          <div onclick="lvjing('highpass')" class="filter-item"><img src="" alt=""/><span>highpass</span></div>
+          <div onclick="lvjing('grayscale')" class="filter-item"><img src="" alt=""/><span>Grayscale</span></div>
+          <div onclick="lvjing('invert')" class="filter-item"><img src="" alt=""/><span>invert</span></div>
+          <div onclick="lvjing('laplacian')" class="filter-item"><img src="" alt=""/><span>laplacian</span></div>
+          <div onclick="lvjing('prewittHorizontal')" class="filter-item"><img src="" alt=""/><span>Prewitt Horizontal</span></div>
+          <div onclick="lvjing('prewittVertical')" class="filter-item"><img src="" alt=""/><span>Prewitt Vertical</span></div>
+          <div onclick="lvjing('roberts')" class="filter-item"><img src="" alt=""/><span>roberts</span></div>
+          <div onclick="lvjing('saturation')" class="filter-item"><img src="" alt=""/><span>saturation</span></div>
+        </div>
+        <button class="confirm_button raised_button" onclick="confirm()">确认</button> 
+
+      </div>`
+    }
+    control_bar()
+    // filter_bar()
     // Get the image
   </script>
 </html>
