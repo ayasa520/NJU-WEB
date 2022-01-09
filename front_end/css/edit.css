@@ -3,9 +3,19 @@
     padding:0;
     background-color:#121212;
 }
+html{
+    height:100%;
+}
+body{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow:hidden;
+}
 .toolbar{
     display: flex;
     height: 50px;
+    flex: 0 0 auto;
     padding: 0 20px;
     color: #ffffff;
     background-color: #262626;
@@ -69,13 +79,31 @@
 }
 .content{
     position: relative;
+    margin:0 auto;
+    flex: 1 0 auto;
+
 }
 .content canvas{
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%); /* 50%为自身尺寸的一半 */
+    -webkit-transform: translate(-50%, -50%);
 }
 .content img {
-    height: 482px;    
+    height: 482px;
     width: auto;
+}
+.content canvas{
+    margin:0 auto;
+}
+
+.editor_controls{
+    display: block;
+    flex: 0 0 auto;
+    z-index: 2;
+    /* width: 100%; */
+    background-color:#262626;
+    height: 115px;
+    position: relative;
 }
