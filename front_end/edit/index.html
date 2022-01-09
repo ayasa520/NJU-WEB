@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>编辑图片</title>
+
+    <link rel="stylesheet" type="text/css" href="/css/edit.css" />
+    <script src="https://fellipe.com/demos/lena-js/assets/js/lena.js"></script>
+  </head>
+  <body>
+    <div class="toolbar">
+      <div class="left">
+        <div class="toolbar_item">
+          <button type="">打开</button>
+        </div>
+        <div class="toolbar_item">
+          <button type="">保存</button>
+        </div>
+      </div>
+      <div class="center">
+        <div class="toolbar_item">
+          <button type>-</button>
+          <div class="current">
+            <div>缩放</div>
+            <div>75%</div>
+          </div>
+          <button type>+</button>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <img id="original-image" src="/image/big_img/0.jpg" />
+      <canvas id="filtered-image"></canvas>
+    </div>
+  </body>
+  <script>
+    // Get the image
+    var originalImage = document.getElementById("original-image");
+    // The canvas where the processed image will be rendered (With filter)
+    var filteredImageCanvas = document.getElementById("filtered-image");
+    filteredImageCanvas.width =1000 ;
+    filteredImageCanvas.height= 2000; 
+    // Filter to apply, in this case the red filter
+    var ctx = filteredImageCanvas.getContext("2d");
+    ctx.scale(5,2);
+    var filter = LenaJS["red"];
+
+    // Apply the filter
+    LenaJS.filterImage(filteredImageCanvas, filter, originalImage);
+    ctx.scale(5,9);
+  </script>
+</html>

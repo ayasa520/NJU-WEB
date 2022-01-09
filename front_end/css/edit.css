@@ -1,0 +1,81 @@
+*{
+    margin: 0;
+    padding:0;
+    background-color:#121212;
+}
+.toolbar{
+    display: flex;
+    height: 50px;
+    padding: 0 20px;
+    color: #ffffff;
+    background-color: #262626;
+    position: relative;
+    z-index: 3;
+    align-items: center;
+}
+
+.toolbar .center{
+    margin-left:27em;
+    align-items: center;
+    justify-content: center;
+    width: 140px;
+    background-color: inherit;
+    text-transform: capitalize;
+}
+.left .toolbar_item{
+    width: 89px;
+    margin-right:-.6em;
+    display: inline-block;
+    height: 37px;
+}
+.center .toolbar_item{
+    display: inline-flex;
+    background-color: inherit;
+}
+.center .current{
+    display:inline-block;
+    margin-left: 8px;
+    margin-right:8px;
+    background-color: inherit;
+}
+.center .current div{
+    background-color: inherit;
+}
+.left .toolbar_item button{
+    width: 89px;
+    height: 37px;
+    }
+.toolbar_item button{
+    border:none;
+    background-color: #262626;
+    border-radius: 4px;
+    color: #ffffff;
+
+}
+.center .toolbar_item button{
+    width: 40px;
+    font-size: 22px;
+    display: inline-block;
+    height: 40px;
+    line-height: 40px;
+}
+.toolbar_item button:hover{
+    background-color:#0f3f6f;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+}
+.toolbar_item{
+     background-color:#262626;
+}
+.content{
+    position: relative;
+}
+.content canvas{
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.content img {
+    height: 482px;    
+    width: auto;
+}
