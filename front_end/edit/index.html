@@ -6,7 +6,7 @@
     <title>编辑图片</title>
 
     <link rel="stylesheet" type="text/css" href="/css/edit.css" />
-    <script src="https://fellipe.com/demos/lena-js/assets/js/lena.js"></script>
+    <script src="/js/lena.js"></script>
   </head>
   <body>
     <div class="toolbar">
@@ -15,10 +15,18 @@
           <button type="">打开</button>
         </div>
         <div class="toolbar_item">
- 
-        <button onclick="download_image()"><svg viewBox="0 0 24 24" fit="" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" focusable="false">
-                  <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path>
-                </svg><span>保存</span></button>
+          <button onclick="download_image()">
+            <svg
+              viewBox="0 0 24 24"
+              fit=""
+              height="100%"
+              width="100%"
+              preserveAspectRatio="xMidYMid meet"
+              focusable="false"
+            >
+              <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path></svg
+            ><span>保存</span>
+          </button>
         </div>
       </div>
       <div class="center">
@@ -35,62 +43,85 @@
     <div class="content">
       <!-- <img id="original-image" src="/image/big_img/0.jpg" /> -->
       <canvas id="original-image"></canvas>
-      <canvas id="filtered-image" hidden='false'></canvas>
+      <canvas id="filtered-image" hidden="false"></canvas>
     </div>
-    <input type='checkbox' id='sideToggle'>
+    <input type="checkbox" id="sideToggle" />
     <aside>
       <div class="slider">
-        <div class="slider_content">
-         <p>亮度</p> 
+        <div class="slider_content" >
+          <p>亮度</p>
         </div>
-        <input class="range slider__range" type="range" value="100" min="0" max="200" step="1" data-reactid=".0.1.0.0.$/=11.1.1">
+        <input
+          class="range slider__range"id="brightness"
+          type="range"
+          value="0"
+          min="-50"
+          max="50"
+          step="1"
+          data-reactid=".0.1.0.0.$/=11.1.1"
+        />
       </div>
-   <div class="slider">
+      <div class="slider">
         <div class="slider_content">
-         <p>饱和度</p> 
+          <p>饱和度</p>
         </div>
-        <input class="range slider__range" type="range" value="100" min="0" max="200" step="1" data-reactid=".0.1.0.0.$/=11.1.1">
+        <input
+          class="range slider__range"
+          type="range"id="saturation"
+          value="0"
+          min="-50"
+          max="50"
+          step="1"
+          data-reactid=".0.1.0.0.$/=11.1.1"
+        />
       </div>
-   <div class="slider">
+      <div class="slider">
         <div class="slider_content">
-         <p>对比度</p> 
+          <p>对比度</p>
         </div>
-        <input class="range slider__range" type="range" value="100" min="0" max="200" step="1" data-reactid=".0.1.0.0.$/=11.1.1">
+        <input
+          class="range slider__range"
+          id = "contrast"
+          type="range"
+          value="0"
+          min="-100"
+          max="100"
+          step="1"
+          data-reactid=".0.1.0.0.$/=11.1.1"
+        />
       </div>
-
     </aside>
-    <div class="editor_controls" id="footer">
- 
-    </div>
+    <div class="editor_controls" id="footer"></div>
   </body>
   <script>
     var originalImage = document.getElementById("original-image");
     // // The canvas where the processed image will be rendered (With filter)
     var filteredImageCanvas = document.getElementById("filtered-image");
-    
-    const sidebar_on=()=>{
-      document.getElementById('sideToggle').checked = true;
-    }
-    const sidebar_off=()=>{
-      document.getElementById('sideToggle').checked = false;
-    }
 
+    const sidebar_on = () => {
+      document.getElementById("sideToggle").checked = true;
+    };
+    const sidebar_off = () => {
+      document.getElementById("sideToggle").checked = false;
+    };
+    var original_data = [];
     const paint = (img, dom, rate) => {
       dom.height = img.height * rate;
       dom.width = img.width * rate;
       let ctx = dom.getContext("2d");
       ctx.scale(rate, rate);
       ctx.drawImage(img, 0, 0, img.width, img.height);
+      original_data = ctx.getImageData(0, 0, dom.width, dom.height);
     };
 
     // 如果想拿到 Promise 的东西, 得返回 Promise 然后 then
-    function __picWM({ url = "", dom = null ,rate=0} = {}) {
+    function __picWM({ url = "", dom = null, rate = 0 } = {}) {
       return new Promise((resolve, reject) => {
         const img = new Image();
         img.src = url;
         img.crossOrigin = "anonymous";
         img.onload = function () {
-          rate =rate!=0?rate:(screen.height * 0.6) / img.height;
+          rate = rate != 0 ? rate : (screen.height * 0.6) / img.height;
           const digit = document.getElementById("scale_rate");
           digit.innerText = `${rate * 100}`.slice(0, 2) + "%";
 
@@ -107,14 +138,19 @@
 
     // ctx.scale(5,9);
 
-    let img_promise =__picWM({ url: window.location.href.split('?')[1], dom: originalImage });
+    let img_promise = __picWM({
+      url: window.location.href.split("?")[1],
+      dom: originalImage,
+    });
     // __picWM({ url: "/image/big_img/0.jpg", dom: filteredImageCanvas,rate:1 });
-    img_promise.then((res)=>{paint(res,filteredImageCanvas,1)})
-   
+    img_promise.then((res) => {
+      paint(res, filteredImageCanvas, 1);
+    });
+
     const lvjing = (_filter) => {
       const filter = LenaJS[_filter];
       LenaJS.redrawCanvas(originalImage, filter);
-      LenaJS.redrawCanvas(filteredImageCanvas,filter);
+      LenaJS.redrawCanvas(filteredImageCanvas, filter);
     };
 
     const zoom_in = () => {
@@ -140,25 +176,27 @@
           : "10%";
     };
 
-    const confirm=()=>{
-          control_bar();
-          img_promise = new Promise((res)=>{
-                const new_img = new Image()
-                new_img.src = filteredImageCanvas.toDataURL("image/png");
-                res(new_img);
-              })
-        }
-    const cancel = ()=>{
+    const confirm = () => {
+      control_bar();
+      img_promise = new Promise((res) => {
+        const new_img = new Image();
+        new_img.src = filteredImageCanvas.toDataURL("image/png");
+        res(new_img);
+      });
+    };
+    const cancel = () => {
       control_bar();
       const digit = document.getElementById("scale_rate");
       const val = Number(digit.innerText.slice(0, -1));
-        img_promise.then((res) => {
-          paint(res, originalImage, val/100);
-          paint(res, filteredImageCanvas, 1);
-        })
-  }
-    const control_bar = ()=>{
-          document.getElementById('footer').innerHTML = ` <button class="control-button" onclick = "filter_bar()">
+      img_promise.then((res) => {
+        paint(res, originalImage, val / 100);
+        paint(res, filteredImageCanvas, 1);
+      });
+    };
+    const control_bar = () => {
+      document.getElementById(
+        "footer"
+      ).innerHTML = ` <button class="control-button" onclick = "filter_bar()">
                     <svg viewBox="0 0 512 512" fit="" height="100%" width="100%" preserveAspectRatio="xMidYMid meet" focusable="false">
                     <path stroke="null" id="svg_3" d="m381.694065,247.362094c-0.2136,-0.35075 -0.43607,-0.697187 -0.685886,-1.030687l-116.642047,-158.889031c-2.502598,-3.416219 -6.553613,-5.442375 -10.867749,-5.442375c-4.31857,0 -8.365151,2.026156 -10.86701,5.442375l-116.642786,158.889031c-0.240208,0.3335 -0.471547,0.675625 -0.681452,1.030687c-23.960932,40.189625 -23.578078,88.974063 1.02809,130.505594c26.356361,44.4935 75.083846,72.132313 127.163157,72.132313s100.806797,-27.643125 127.166853,-72.136625c24.601733,-41.527938 24.989023,-90.315969 1.028829,-130.501281zm-24.174533,117.535031c-21.600981,36.470813 -61.459988,59.126531 -104.021149,59.126531c-42.556727,0 -82.415733,-22.651406 -104.021149,-59.122219c-19.967567,-33.708656 -20.461287,-71.573844 -1.375468,-103.992344l105.396617,-143.568156l105.396617,143.57175c19.081384,32.419219 18.59136,70.283687 -1.375468,103.984438z"></path>
                     <path stroke="null" id="svg_6" d="m323.394476,295.877c-7.376972,0 -13.356304,5.814688 -13.356304,12.988531c0,30.790531 -25.763601,55.845438 -57.431145,55.845438c-7.376972,0 -13.356304,5.814687 -13.356304,12.988531c0,7.173844 5.979331,12.988531 13.356304,12.988531c46.394142,0 84.143014,-36.709438 84.143014,-81.821781c0.000739,-7.174562 -5.978592,-12.98925 -13.355565,-12.98925z"></path>
@@ -171,16 +209,17 @@
               </svg>
             <span>特效</span>
             </button>
-            `
-          document.getElementById('effect').onclick=(e)=>{
-                sidebar_on();
-                e.stopPropagation ? e.stopPropagation() : e.cancelBubble = true;
-          }
-          document.querySelector('aside').onclick = document.getElementById('effect').onclick;
-        }
-    const  filter_bar=()=>{
-          document.getElementById('footer').innerHTML = `     <div>
-        <button class="cancel_button raised_button" onclick="cancel()">取消</button> 
+            `;
+      document.getElementById("effect").onclick = (e) => {
+        sidebar_on();
+        e.stopPropagation ? e.stopPropagation() : (e.cancelBubble = true);
+      };
+      document.querySelector("aside").onclick =
+        document.getElementById("effect").onclick;
+    };
+    const filter_bar = () => {
+      document.getElementById("footer").innerHTML = `     <div>
+        <button class="cancel_button raised_button" onclick="cancel()">取消</button>
         <div class="filter-list">
           <div onclick="lvjing('red')" class="filter-item"><img src="" alt=""/><span>Red</span></div>
           <div onclick="lvjing('gaussian')" class="filter-item"><img src="" alt=""/><span>Gaussian</span></div>
@@ -193,41 +232,332 @@
           <div onclick="lvjing('roberts')" class="filter-item"><img src="" alt=""/><span>roberts</span></div>
           <div onclick="lvjing('saturation')" class="filter-item"><img src="" alt=""/><span>saturation</span></div>
         </div>
-        <button class="confirm_button raised_button" onclick="confirm()">确认</button> 
-        
-      </div>`
-    }
-    control_bar()
+        <button class="confirm_button raised_button" onclick="confirm()">确认</button>
+
+      </div>`;
+    };
+    control_bar();
     // filter_bar()
     // Get the image
-      const  base64Img2Blob = (code)=>{
-        const parts = code.split(';base64,');
-        const contentType = parts[0].split(':')[1];
-        const raw = window.atob(parts[1]);
-        const rawLength = raw.length;
+    const base64Img2Blob = (code) => {
+      const parts = code.split(";base64,");
+      const contentType = parts[0].split(":")[1];
+      const raw = window.atob(parts[1]);
+      const rawLength = raw.length;
 
-        const uInt8Array = new Uint8Array(rawLength);
+      const uInt8Array = new Uint8Array(rawLength);
 
-        for (let i = 0; i < rawLength; ++i) {
-                                uInt8Array[i] = raw.charCodeAt(i);
-                              }
+      for (let i = 0; i < rawLength; ++i) {
+        uInt8Array[i] = raw.charCodeAt(i);
+      }
 
-        return new Blob([uInt8Array], {type: contentType}); 
-    }
-    const download_image=()=>{
-                   
-      var aLink = document.createElement('a');
+      return new Blob([uInt8Array], { type: contentType });
+    };
+    const download_image = () => {
+      var aLink = document.createElement("a");
       var blob = base64Img2Blob(originalImage.toDataURL()); //new Blob([content]);
-    
+
       var evt = document.createEvent("mouseEvents");
-      evt.initEvent("click", false, false);//initEvent 不加后两个参数在FF下会报错
-      aLink.download = 'result.png';
+      evt.initEvent("click", false, false); //initEvent 不加后两个参数在FF下会报错
+      aLink.download = "result.png";
       aLink.href = URL.createObjectURL(blob);
 
       aLink.dispatchEvent(evt);
-        }
+    };
     document.onclick = function () {
       sidebar_off();
+    };
+    // original_img 是保存的 Image 对象, 每一次修改不是在上一次基础上, 而是在初始的(保存的) Image 上
+    // 避免损失
+    const change_brightness = (original_img, canvas, rate) => {
+      const ctx = canvas.getContext("2d");
+
+      const src = document.createElement("canvas");
+      const ctx_src = src.getContext("2d");
+      paint(original_img, src, canvas.width / original_img.width);
+      let imgData = ctx_src.getImageData(0, 0, src.width, src.height);
+
+      for (let i = 0; i < imgData.data.length; i += 4) {
+        let [h, s, v] = rgb2hsv(
+          imgData.data[i],
+          imgData.data[i + 1],
+          imgData.data[i + 2]
+        );
+        v = v + rate > 1 ? 1 : v + rate;
+        const [r, g, b] = hsv2rgb(h, s, v);
+        imgData.data[i] = r;
+        imgData.data[i + 1] = g;
+        imgData.data[i + 2] = b;
+      }
+
+      ctx.putImageData(imgData, 0, 0);
+    };
+  const change_brightness_canvas = (canvas, rate) => {
+      const ctx = canvas.getContext("2d");
+     let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+      for (let i = 0; i < imgData.data.length; i += 4) {
+        let [h, s, v] = rgb2hsv(
+          imgData.data[i],
+          imgData.data[i + 1],
+          imgData.data[i + 2]
+        );
+        v = v + rate > 1 ? 1 : v + rate;
+        const [r, g, b] = hsv2rgb(h, s, v);
+        imgData.data[i] = r;
+        imgData.data[i + 1] = g;
+        imgData.data[i + 2] = b;
+      }
+
+      ctx.putImageData(imgData, 0, 0);
+    };
+    // hsv 又称 hsb b=brightness , 另一种 hsl l=lightness
+    // PS 拾色器用的是 hsb(hsv) 色相饱和度面板用的是 hsl
+    // ps 中 brightness 是亮度, lightness 是明度, 维基百科相反
+    // 亮度明度什么的不是我研究的东西
+
+    // 返回 h: 0~1 s: 0~1 v: 0~1, 网上查到 h 大多是 0~360°? 不过这没关系, 乘个 360 数值上就一样的
+    const rgb2hsv = (r, g, b) => {
+      const r1 = r / 255;
+      const g1 = g / 255;
+      const b1 = b / 255;
+      const cmax = Math.max(r1, g1, b1);
+      const cmin = Math.min(r1, g1, b1);
+
+      const delta = cmax - cmin;
+
+      let h = !delta
+        ? 0
+        : cmax === r1
+        ? (1 / 6) * ((g1 - b1) / delta + 0)
+        : cmax === g1
+        ? (1 / 6) * ((b1 - r1) / delta + 2)
+        : (1 / 6) * ((r1 - g1) / delta + 4);
+      let s = !cmax ? 0 : delta / cmax;
+      let v = cmax;
+
+      if (h < 0) h += 1;
+
+      return [h, s, v];
+    };
+    // h: 0~1 , rgb 均在 0~255
+    const hsv2rgb = (h, s, v) => {
+      let r, g, b;
+      h *= 6;
+      i = Math.floor(h);
+      const f = h - i;
+      const p = v * (1 - s);
+      const q = v * (1 - s * f);
+      const t = v * (1 - s * (1 - f));
+      switch (i) {
+        case 0:
+          r = v;
+          g = t;
+          b = p;
+          break;
+        case 1:
+          r = q;
+          g = v;
+          b = p;
+          break;
+        case 2:
+          r = p;
+          g = v;
+          b = t;
+          break;
+        case 3:
+          r = p;
+          g = q;
+          b = v;
+          break;
+        case 4:
+          r = t;
+          g = p;
+          b = v;
+          break;
+        default:
+          // case 5:
+          r = v;
+          g = p;
+          b = q;
+          break;
+      }
+
+      r *= 255;
+      g *= 255;
+      b *= 255;
+      r = r > 255 ? 255 : parseInt(r);
+      g = g > 255 ? 255 : parseInt(g);
+      b = b > 255 ? 255 : parseInt(b);
+      return [r, g, b];
+    };
+
+    // h 仍然是 0~1, 但一般是 0~360°
+    const rgb2hsl = (r, g, b) => {
+      const r1 = r / 255;
+      const g1 = g / 255;
+      const b1 = b / 255;
+      const cmax = Math.max(r1, g1, b1);
+      const cmin = Math.min(r1, g1, b1);
+
+      const delta = cmax - cmin;
+
+      let l = (cmin + cmax) / 2;
+      let h = !delta
+        ? 0
+        : cmax === r1
+        ? (1 / 6) * ((g1 - b1) / delta + 0)
+        : cmax === g1
+        ? (1 / 6) * ((b1 - r1) / delta + 2)
+        : (1 / 6) * ((r1 - g1) / delta + 4);
+      let s =
+        l === 0 || delta === 0
+          ? 0
+          : 0 < l && l <= 1 / 2
+          ? delta / (2 * l)
+          : delta / (2 - 2 * l);
+
+      if (h < 0) h += 1;
+      return [h, s, l];
+    };
+    const hsl2rgb = (h, s, l) => {
+      const res = [];
+      const rgb = [];
+      if (s === 0) {
+        rgb[0] = Math.round(l * 255);
+        rgb[1] = Math.round(l * 255);
+        rgb[2] = Math.round(l * 255);
+      } else {
+        const q = l < 0.5 ? l*(1 + s) : l + s - l * s;
+        const p = 2 * l - q;
+        res[0] = h + 1 / 3;
+        res[1] = h;
+        res[2] = h - 1 / 3;
+        res.forEach((c) => {
+
+          c = c < 0 ? c + 1 : c > 1 ? c - 1 : c;
+          switch (true) {
+            case c < 1 / 6:
+              c = p + (q - p) * 6 * c;
+              break;
+            case 1 / 6 <= c && c < 0.5:
+              c = q;
+              break;
+            case 0.5 <= c && c < 2 / 3:
+              c = p + (q - p) * (4 - 6 * c);
+              break;
+            default:
+              c = p;
+          }
+          rgb.push(Math.round(c*255));
+        });
+        
+      }
+      return rgb;
+    };
+
+    const change_saturation=(original_img, canvas, rate) => {
+      const ctx = canvas.getContext("2d");
+
+      const src = document.createElement("canvas");
+      const ctx_src = src.getContext("2d");
+      paint(original_img, src, canvas.width / original_img.width);
+      let imgData = ctx_src.getImageData(0, 0, src.width, src.height);
+
+      for (let i = 0; i < imgData.data.length; i += 4) {
+        let [h, s, l] = rgb2hsl(
+          imgData.data[i],
+          imgData.data[i + 1],
+          imgData.data[i + 2]
+        );
+        s = s + rate > 1 ? 1 : s + rate;
+        const [r, g, b] = hsl2rgb(h, s, l);
+        imgData.data[i] = r;
+        imgData.data[i + 1] = g;
+        imgData.data[i + 2] = b;
+      }
+
+      ctx.putImageData(imgData, 0, 0);
+    };
+const change_saturation_canvas=(canvas, rate) => {
+      const ctx = canvas.getContext("2d");
+
+
+      let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+      for (let i = 0; i < imgData.data.length; i += 4) {
+        let [h, s, l] = rgb2hsl(
+          imgData.data[i],
+          imgData.data[i + 1],
+          imgData.data[i + 2]
+        );
+        s = s + rate > 1 ? 1 : s + rate;
+        const [r, g, b] = hsl2rgb(h, s, l);
+        imgData.data[i] = r;
+        imgData.data[i + 1] = g;
+        imgData.data[i + 2] = b;
+      }
+
+      ctx.putImageData(imgData, 0, 0);
+    };
+    const change_contrast=(canvas, rate)=>{
+      const ctx = canvas.getContext("2d");
+      const formula = (rgb,rate)=> rgb + (rgb - 127) * rate / 255;
+          const adjust = (rgb)=> rgb<0?0:rgb>255?255:rgb;
+      let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+          for (let i = 0; i < imgData.data.length; i += 4) {
+            imgData.data[i] = formula(imgData.data[i],rate);
+            imgData.data[i+1] = formula(imgData.data[i+1],rate);
+            imgData.data[i+2] = formula(imgData.data[i+2],rate);
+
+            adjust(imgData.data[i])
+            adjust(imgData.data[i+1])
+            adjust(imgData.data[i+2])
+          }
+      ctx.putImageData(imgData, 0, 0);
     }
+    const saturation=document.getElementById('saturation');
+    const brightness=document.getElementById('brightness');
+    const contrast=document.getElementById('contrast');
+    saturation.addEventListener('change',()=>{
+          img_promise.then(img=>{
+                change_brightness(img,originalImage,(brightness.value)/100);
+
+                change_saturation_canvas(originalImage,(saturation.value)/100);
+
+                change_contrast(originalImage,contrast.value);
+
+          })
+    })
+    brightness.addEventListener('change',()=>{
+          img_promise.then(img=>{
+                change_saturation(img,originalImage,(saturation.value)/100);
+   
+                change_brightness_canvas(originalImage,(brightness.value)/100);            
+
+                change_contrast(originalImage,contrast.value);
+              })
+        })
+    contrast.addEventListener('change',()=>{
+          img_promise.then(img=>{
+              change_saturation(img,originalImage,(saturation.value)/100);
+    
+              change_brightness_canvas(originalImage,(brightness.value)/100);              
+
+              change_contrast(originalImage,contrast.value);
+              })
+        })
+
+    // function saturation(rate) {
+    //   img_promise.then((res) => {
+    //     change_saturation(res, originalImage, rate);
+    //   });
+    // }
+    // function brightness(rate) {
+    //   img_promise.then((res) => {
+    //     change_brightness(res, originalImage, rate);
+    //   });
+    // }
   </script>
 </html>
