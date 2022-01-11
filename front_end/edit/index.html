@@ -465,6 +465,9 @@
       let imgData = ctx_src.getImageData(0, 0, src.width, src.height);
 
       for (let i = 0; i < imgData.data.length; i += 4) {
+  
+        if (imgData.data[i]===imgData.data[i+1]&& imgData.data[i+1]===imgData.data[i+2]) continue
+
         let [h, s, l] = rgb2hsl(
           imgData.data[i],
           imgData.data[i + 1],
@@ -486,6 +489,7 @@ const change_saturation_canvas=(canvas, rate) => {
       let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
       for (let i = 0; i < imgData.data.length; i += 4) {
+        if (imgData.data[i]===imgData.data[i+1]&& imgData.data[i+1]===imgData.data[i+2]) continue
         let [h, s, l] = rgb2hsl(
           imgData.data[i],
           imgData.data[i + 1],
@@ -522,9 +526,9 @@ const change_saturation_canvas=(canvas, rate) => {
     const contrast=document.getElementById('contrast');
     saturation.addEventListener('change',()=>{
           img_promise.then(img=>{
-                change_brightness(img,originalImage,(brightness.value)/100);
-
-                change_saturation_canvas(originalImage,(saturation.value)/100);
+               change_saturation(img,originalImage,(saturation.value)/100);
+   
+                change_brightness_canvas(originalImage,(brightness.value)/100);            
 
                 change_contrast(originalImage,contrast.value);
 
